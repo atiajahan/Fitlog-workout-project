@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
+
 import PlanMetrics from "@/components/PlanMetrics";
 import PlanWorkoutCard from "@/components/PlanWorkoutCard";
 import { useFitLog } from "@/context/FitLogContext";
@@ -10,100 +12,130 @@ export default function MyPlanPage() {
   const { plan, saved } = useFitLog();
 
   const [activeTab, setActiveTab] = useState<"plan" | "saved">("plan");
-  const [sortBy, setSortBy] = useState<"duration" | "caloriesBurned" | "rating">("duration");
+
+  const [sortBy, setSortBy] = useState<
+    "duration" | "caloriesBurned" | "rating"
+  >("duration");
 
   const rawWorkouts = activeTab === "plan" ? plan : saved;
 
-  const workouts = [...rawWorkouts].sort((a, b) => b[sortBy] - a[sortBy]);
+  const workouts = [...rawWorkouts].sort(
+    (a, b) => b[sortBy] - a[sortBy]
+  );
 
   return (
-    <main className="w-full max-w-7xl mx-auto py-8 space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl sm:text-4xl font-black uppercase text-white tracking-wide">
+    <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+      {/* ================= HEADER ================= */}
+      <section className="mb-8">
+        <h1 className="text-4xl font-black uppercase tracking-tight text-white sm:text-5xl lg:text-6xl">
           MY PLAN
         </h1>
-        <p className="mt-1.5 text-xs text-gray-400 font-medium">
+
+        <p className="mt-2 max-w-md text-sm leading-6 text-gray-500">
           Cap of five lifts for today. Finish them, then load more.
         </p>
-      </div>
+      </section>
 
-      {/* Metrics Banner */}
-      <PlanMetrics />
+      {/* ================= METRICS ================= */}
+      <section className="mb-8">
+        <PlanMetrics />
+      </section>
 
-      {/* Filter Tabs & Sort Dropdown */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-800/80 pb-4">
-        {/* Toggle Buttons */}
-        <div className="flex rounded-xl bg-[#12151a] p-1 border border-gray-800/80">
+      {/* ================= TABS + SORT ================= */}
+      <section className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Tabs */}
+        <div className="inline-flex w-fit items-center rounded-xl border border-white/10 bg-[#0d1014] p-1">
           <button
+            type="button"
             onClick={() => setActiveTab("plan")}
-            className={`rounded-lg px-4 py-2 text-xs font-bold transition-all ${
+            className={`rounded-lg px-5 py-2.5 text-xs font-bold uppercase tracking-wide transition-all duration-200 ${
               activeTab === "plan"
-                ? "bg-[#252932] text-white"
-                : "text-gray-400 hover:text-white"
+                ? "bg-white/[0.08] text-white shadow-sm"
+                : "bg-transparent text-gray-500 hover:text-gray-300"
             }`}
           >
             Today&apos;s Plan
           </button>
 
           <button
+            type="button"
             onClick={() => setActiveTab("saved")}
-            className={`rounded-lg px-4 py-2 text-xs font-bold transition-all ${
+            className={`rounded-lg px-5 py-2.5 text-xs font-bold uppercase tracking-wide transition-all duration-200 ${
               activeTab === "saved"
-                ? "bg-[#252932] text-white"
-                : "text-gray-400 hover:text-white"
+                ? "bg-white/[0.08] text-white shadow-sm"
+                : "bg-transparent text-gray-500 hover:text-gray-300"
             }`}
           >
             Saved
           </button>
         </div>
 
-        {/* Sort Dropdown */}
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-gray-400 font-medium">Sort By</span>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
-            className="bg-[#12151a] border border-gray-800 text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-[#ccff00]"
-          >
-            <option value="duration">Duration</option>
-            <option value="caloriesBurned">Calories</option>
-            <option value="rating">Rating</option>
-          </select>
-        </div>
-      </div>
+        {/* Sort */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-gray-500">
+            Sort By
+          </span>
 
-      {/* Content Area */}
-      <div className="space-y-4">
+          <div className="relative">
+            <select
+              value={sortBy}
+              onChange={(e) =>
+                setSortBy(
+                  e.target.value as
+                    | "duration"
+                    | "caloriesBurned"
+                    | "rating"
+                )
+              }
+              className="appearance-none rounded-xl border border-white/10 bg-[#0d1014] py-2.5 pl-4 pr-10 text-xs font-semibold text-gray-300 outline-none transition hover:border-white/20 focus:border-[#ccff00]/50"
+            >
+              <option value="duration">Duration</option>
+              <option value="caloriesBurned">Calories</option>
+              <option value="rating">Rating</option>
+            </select>
+
+            <ChevronDown
+              size={14}
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ================= DIVIDER ================= */}
+      <div className="mb-6 h-px w-full bg-white/[0.06]" />
+
+      {/* ================= CONTENT ================= */}
+      <section>
         {workouts.length === 0 ? (
-          /* Empty State Box matching Figma design */
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-800/80 bg-[#12151a] py-24 text-center px-4">
-            <h2 className="text-2xl sm:text-3xl font-black uppercase text-white tracking-wide">
+          <div className="flex min-h-[360px] flex-col items-center justify-center rounded-2xl border border-white/[0.06] bg-[#0d1014] px-5 py-16 text-center">
+            <h2 className="text-2xl font-black uppercase tracking-wide text-white sm:text-3xl">
               NOTHING HERE YET
             </h2>
 
-            <p className="mt-2 text-xs text-gray-400 font-medium">
+            <p className="mt-3 max-w-sm text-sm leading-6 text-gray-500">
               Browse the library and add a lift to get today moving.
             </p>
 
-            {/* Go to workouts Button */}
             <Link
               href="/"
-              className="mt-6 rounded-full bg-[#ccff00] px-6 py-2.5 text-xs font-black text-black hover:bg-[#b8e600] transition-all shadow-md"
+              className="mt-7 rounded-full bg-[#ccff00] px-6 py-3 text-xs font-black uppercase tracking-wide text-black transition hover:bg-[#b8e600] hover:scale-[1.02]"
             >
               Go to workouts
             </Link>
           </div>
         ) : (
-          workouts.map((workout) => (
-            <PlanWorkoutCard
-              key={workout.id}
-              workout={workout}
-              type={activeTab}
-            />
-          ))
+          <div className="space-y-4">
+            {workouts.map((workout) => (
+              <PlanWorkoutCard
+                key={workout.id}
+                workout={workout}
+                type={activeTab}
+              />
+            ))}
+          </div>
         )}
-      </div>
+      </section>
     </main>
   );
 }
