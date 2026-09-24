@@ -32,16 +32,16 @@ export default function Navbar() {
           >
             Workout
           </Link>
-          <Link
-            href="/plan"
-            className={`rounded-full px-5 py-2 text-sm font-bold uppercase transition-all ${
-              pathname === "/plan"
-                ? "bg-[#baff00] text-black shadow-md"
-                : "text-gray-400 hover:text-white"
-            }`}
+        <Link
+             href="/my-plan"
+             className={`rounded-full px-5 py-2 text-sm font-bold uppercase transition-all ${
+            pathname === "/my-plan"
+            ? "bg-[#baff00] text-black shadow-md"
+            : "text-gray-400 hover:text-white"
+        }`}
           >
-            My Plan
-          </Link>
+         My Plan
+       </Link>
         </nav>
 
         {/* Right Counters */}
