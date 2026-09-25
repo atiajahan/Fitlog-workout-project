@@ -1,5 +1,6 @@
 "use client";
 
+
 import {
   createContext,
   useContext,
@@ -8,6 +9,7 @@ import {
   ReactNode,
 } from "react";
 import { Workout } from "@/types/workout";
+
 
 interface FitLogContextType {
   plan: Workout[];
@@ -22,10 +24,12 @@ interface FitLogContextType {
 
 const FitLogContext = createContext<FitLogContextType | undefined>(undefined);
 
+
 export const FitLogProvider = ({ children }: { children: ReactNode }) => {
   const [plan, setPlan] = useState<Workout[]>([]);
   const [saved, setSaved] = useState<Workout[]>([]);
 
+  
   useEffect(() => {
     const storedPlan = localStorage.getItem("fitlog-plan");
     const storedSaved = localStorage.getItem("fitlog-saved");
